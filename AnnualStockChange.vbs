@@ -6,14 +6,21 @@ Dim openPrice As Double
 Dim closePrice As Double
 Dim volume As Double
 Dim summary_table_row As Integer
+Dim sht as Worksheet
 
 ''''''Creating Summary Table''''''
 
+Range("J1:M1").Merge
+Range("J1:M2").Font.Bold = True
+Range("J1:M2").HorizontalAlignment = xlcenter
 Range("J1").Value = "Summary Table"
 Range("J2").Value = "Ticker"
 Range("K2").Value = "Annual Change"
 Range("L2").Value = "Percent Change"
 Range("M2").Value = "Total Stock Volume"
+For Each sht In ThisWorkbook.Worksheets
+    sht.Cells.EntireColumn.AutoFit
+Next sht
 
 summary_table_row = 3
 
@@ -59,5 +66,25 @@ next_ticker = Cells(i + 1, 1).Value
     End If
 
 Next i
+
+''''''Adding Formatting to Summary Table''''''
+
+lastrow2 = cells(rows.count,11).end(xlup).row
+
+Range("L:L").NumberFormat = "###.##%"
+Range("M:M").NumberFormat = "###,###,###"
+
+For i = 3 to lastrow2
+
+    If cells(i,11).value > 0 Then
+        Cells(i,11).interior.colorindex = 4
+    Elseif Cells(i,11).value < 0 Then
+        Cells(i,11).interior.colorindex = 3
+    End If
+
+Next i
+
+
+
 
 End Sub
