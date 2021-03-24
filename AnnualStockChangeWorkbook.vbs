@@ -1,4 +1,4 @@
-Sub AnnualStockChange():
+Sub AnnualStockChangeWorkbook():
 
 'Declaring variables'
 Dim ticker As String
@@ -11,7 +11,6 @@ Dim ws As Worksheet
 
 ''''''Adding ability to run on all spreadsheets at once''''''
 For Each ws In Worksheets
-ws.select
     
 
 ''''''Creating Summary Table''''''
@@ -48,27 +47,26 @@ next_ticker = Cells(i + 1, 1).Value
         volume = volume + Cells(i, 7).Value
         ticker = Cells(i, 1).Value
         closePrice = Cells(i, 6).Value
-        openPrice = Cells(summary_table_row, 14).Value
         Cells(summary_table_row, 10).Value = ticker
         Cells(summary_table_row, 11).Value = (closePrice - openPrice)
 
-        If openPrice = 0 and closePrice = 0 Then
+        If openPrice = 0 And closePrice = 0 Then
             Cells(summary_table_row, 12).Value = "Price stayed at 0"
-        Elseif openPrice = 0 and closeprice <> 0 Then
+        ElseIf openPrice = 0 And closePrice <> 0 Then
             Cells(summary_table_row, 12).Value = "Stock opened at zero this year"
         Else
             Cells(summary_table_row, 12).Value = ((closePrice - openPrice) / openPrice)
-        End if
+        End If
         
         Cells(summary_table_row, 13).Value = volume
+        openPrice = 0
         volume = 0
         ticker = ""
         summary_table_row = summary_table_row + 1
     Else
         volume = volume + Cells(i, 7).Value
-        If Cells(summary_table_row, 14).Value = "" Then
+        If openPrice = 0 Then
             openPrice = Cells(i, 3).Value
-            Cells(summary_table_row, 14).Value = openPrice
         End If
     End If
 
@@ -124,8 +122,8 @@ Range("P1:P4").HorizontalAlignment = xlLeft
 
 
 ws.Cells.EntireColumn.AutoFit
-'Using this column to store first open price of each stock'
-ws.Columns("N").Hidden = True
+
 Next
 
 End Sub
+
